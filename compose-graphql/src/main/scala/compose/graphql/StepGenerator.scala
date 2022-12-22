@@ -4,6 +4,8 @@ import compose.Interpreter
 import zio.schema.StandardType
 import caliban.Value
 import caliban.schema.Step
+import sourcecode.Macros.Chunk
+import zio.Chunk
 import zio.schema.DynamicValue
 import zio.query.ZQuery
 import zio.schema.meta.MetaSchema
@@ -16,33 +18,47 @@ final class StepGenerator(graph: Graph, i: Interpreter) {
     case StandardType.StringType => Value.StringValue(result.asInstanceOf[String])
 
     // TODO: implement the rest of the cases
-    case StandardType.ByteType           => ???
-    case StandardType.CharType           => ???
-    case StandardType.LongType           => ???
-    case StandardType.BinaryType         => ???
-    case StandardType.DayOfWeekType      => ???
-    case StandardType.ZonedDateTimeType  => ???
-    case StandardType.OffsetTimeType     => ???
-    case StandardType.ShortType          => ???
-    case StandardType.LocalTimeType      => ???
-    case StandardType.YearMonthType      => ???
-    case StandardType.LocalDateType      => ???
-    case StandardType.UUIDType           => ???
-    case StandardType.ZoneOffsetType     => ???
-    case StandardType.MonthDayType       => ???
-    case StandardType.YearType           => ???
-    case StandardType.OffsetDateTimeType => ???
-    case StandardType.BigDecimalType     => ???
-    case StandardType.FloatType          => ???
-    case StandardType.PeriodType         => ???
-    case StandardType.BigIntegerType     => ???
-    case StandardType.UnitType           => ???
-    case StandardType.MonthType          => ???
-    case StandardType.DurationType       => ???
-    case StandardType.ZoneIdType         => ???
-    case StandardType.InstantType        => ???
-    case StandardType.LocalDateTimeType  => ???
-    case StandardType.DoubleType         => ???
+    case StandardType.ByteType      => Value.IntValue(result.asInstanceOf[Byte])
+    case StandardType.CharType      => Value.StringValue(result.asInstanceOf[Char].toString)
+    case StandardType.LongType      => Value.IntValue(result.asInstanceOf[Long])
+    case StandardType.BinaryType    => Value.StringValue(result.asInstanceOf[Chunk[Byte]].toString)
+    case StandardType.DayOfWeekType =>
+      Value.StringValue(result.asInstanceOf[java.time.DayOfWeek].toString)
+    case StandardType.ZonedDateTimeType =>
+      Value.StringValue(result.asInstanceOf[java.time.ZonedDateTime].toString)
+    case StandardType.OffsetTimeType    =>
+      Value.StringValue(result.asInstanceOf[java.time.OffsetTime].toString)
+    case StandardType.ShortType         => Value.IntValue(result.asInstanceOf[Short])
+    case StandardType.LocalTimeType     =>
+      Value.StringValue(result.asInstanceOf[java.time.LocalTime].toString)
+    case StandardType.YearMonthType     =>
+      Value.StringValue(result.asInstanceOf[java.time.YearMonth].toString)
+    case StandardType.LocalDateType     =>
+      Value.StringValue(result.asInstanceOf[java.time.LocalDate].toString)
+    case StandardType.UUIDType => Value.StringValue(result.asInstanceOf[java.util.UUID].toString)
+    case StandardType.ZoneOffsetType =>
+      Value.StringValue(result.asInstanceOf[java.time.ZoneOffset].toString)
+    case StandardType.MonthDayType   =>
+      Value.StringValue(result.asInstanceOf[java.time.MonthDay].toString)
+    case StandardType.YearType       => Value.IntValue(result.asInstanceOf[java.time.Year].getValue)
+    case StandardType.OffsetDateTimeType =>
+      Value.StringValue(result.asInstanceOf[java.time.OffsetDateTime].toString)
+    case StandardType.BigDecimalType     => Value.FloatValue(result.asInstanceOf[BigDecimal])
+    case StandardType.FloatType          => Value.FloatValue(result.asInstanceOf[Float])
+    case StandardType.PeriodType         =>
+      Value.StringValue(result.asInstanceOf[java.time.Period].toString)
+    case StandardType.BigIntegerType     => Value.IntValue(result.asInstanceOf[BigInt])
+    case StandardType.UnitType           => Value.NullValue
+    case StandardType.MonthType => Value.StringValue(result.asInstanceOf[java.time.Month].toString)
+    case StandardType.DurationType      =>
+      Value.StringValue(result.asInstanceOf[java.time.Duration].toString)
+    case StandardType.ZoneIdType        =>
+      Value.StringValue(result.asInstanceOf[java.time.ZoneId].toString)
+    case StandardType.InstantType       =>
+      Value.StringValue(result.asInstanceOf[java.time.Instant].toString)
+    case StandardType.LocalDateTimeType =>
+      Value.StringValue(result.asInstanceOf[java.time.LocalDateTime].toString)
+    case StandardType.DoubleType        => Value.FloatValue(result.asInstanceOf[Double])
   }
 
   def resolve(meta: MetaSchema, result: DynamicValue): Step[Any] = {
