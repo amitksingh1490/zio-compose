@@ -17,7 +17,7 @@ final class StepGenerator(graph: Graph, i: Interpreter) {
     case StandardType.BoolType   => Value.BooleanValue(result.asInstanceOf[Boolean])
     case StandardType.StringType => Value.StringValue(result.asInstanceOf[String])
 
-    // TODO: implement the rest of the cases
+
     case StandardType.ByteType      => Value.IntValue(result.asInstanceOf[Byte])
     case StandardType.CharType      => Value.StringValue(result.asInstanceOf[Char].toString)
     case StandardType.LongType      => Value.IntValue(result.asInstanceOf[Long])
